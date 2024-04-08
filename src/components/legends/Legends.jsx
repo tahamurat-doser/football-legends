@@ -1,40 +1,38 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { data } from "../../helpers/data";
 import Form from "react-bootstrap/Form";
-import Card from "react-bootstrap/Card";
-import { useState, Fragment } from "react";
+import LegendsCard from "./LegendsCard";
+import { useState } from "react";
 
 const Legends = () => {
-  const [show, setShow] = useState(false);
-  console.log(data);
+  const [search, setSearch] = useState(" ");
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
+  const filteredData = data.filter((item) =>
+    item.name.toUpperCase().includes(search.trim().toUpperCase())
+  );
+  console.log(filteredData);
   return (
     <div>
-      <Form.Control type="search" placeholder="Search legends..." />
-      <Container>
-        <Row xs={1} sm={2} md={3} lg={4} xl={5}>
+      <Form.Control
+        type="search"
+        placeholder="Search legends..."
+        onChange={handleChange}
+        className="w-50 mx-auto my-2"
+      />
+      <Container className="p-3 rounded-4 card-container my-3">
+        <Row
+          xs={1}
+          sm={2}
+          md={3}
+          lg={4}
+          xl={5}
+          className="justify-content-center g-3"
+        >
           {data.map((legend) => (
-            <Col>
-              <Card onClick={() =>setShow(!show)}>
-                {!show ? (
-                  <Card.Img  variant="top" src={legend.img} />
-                ) : (
-                  <Fragment>
-                    <Card.Header>
-                      <Card.Title>{legend.name}</Card.Title>
-                    </Card.Header>
-                    <ul className="m-auto">
-                      {legend.statistics.map((item) => (
-                        <li className="list-unstyled h5 text-start">
-                          {" "}
-                          ⚽️ {item}{" "}
-                        </li>
-                      ))}
-                    </ul>
-                    <span> {legend.official_career} </span>
-                  </Fragment>
-                )}
-              </Card>
-            </Col>
+            <LegendsCard key={legend.id} legend={legend} />
           ))}
         </Row>
       </Container>
